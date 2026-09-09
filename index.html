@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLB Sách và Hành động HVKTQS - BAM</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome cho Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Cấu hình Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                        },
+                        dark: {
+                            bg: '#0f172a', /* Slate 900 */
+                            card: '#1e293b', /* Slate 800 */
+                            border: '#334155' /* Slate 700 */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Hiệu ứng kính mờ (Glassmorphism) */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hover hiệu ứng cho thẻ Bento */
+        .bento-card {
+            transition: all 0.3s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            border-color: rgba(34, 197, 94, 0.3); /* Brand color border on hover */
+        }
+
+        /* Ẩn nội dung overflow cho các thẻ ảnh */
+        .img-container {
+            overflow: hidden;
+            border-radius: inherit;
+        }
+        .img-container img {
+            transition: transform 0.5s ease;
+        }
+        .bento-card:hover .img-container img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-slate-300 font-sans antialiased overflow-x-hidden selection:bg-brand-500 selection:text-white">
+
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300 glass" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <!-- THAY ĐƯỜNG DẪN ẢNH LOGO CỦA BẠN VÀO `src` BÊN DƯỚI -->
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3 overflow-hidden">
+                        <img src="./images/logo.jpg" alt="Logo BAM" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-bold text-xl text-white tracking-wider">BAM <span class="text-brand-500">HVKTQS</span></span>
+                </div>
+                
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#gioi-thieu" class="text-sm font-medium hover:text-brand-400 transition-colors">Giới thiệu</a>
+                    <a href="#hoat-dong" class="text-sm font-medium hover:text-brand-400 transition-colors">Hoạt động</a>
+                    <a href="#thu-vien" class="text-sm font-medium hover:text-brand-400 transition-colors">Thư viện</a>
+                    <a href="#tuyen-thanh-vien" class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:shadow-[0_0_25px_rgba(34,197,94,0.6)]">
+                        Tuyển Gen 10
+                    </a>
+                </div>
+
+                <!-- Nút Menu Mobile -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-dark-border">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
+                <a href="#gioi-thieu" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-dark-border hover:text-white transition-colors">Giới thiệu</a>
+                <a href="#hoat-dong" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-dark-border hover:text-white transition-colors">Hoạt động</a>
+                <a href="#thu-vien" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-dark-border hover:text-white transition-colors">Thư viện</a>
+                <a href="#tuyen-thanh-vien" class="block px-3 py-2 rounded-md text-base font-medium text-brand-400 hover:bg-dark-border transition-colors">Tuyển Gen 10</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- =============================================================== -->
+        <!-- THÊM VIDEO BACKGROUND Ở ĐÂY -->
+        <!-- ĐIỀN LINK VIDEO CỦA BẠN VÀO THUỘC TÍNH `src` CỦA THẺ <source> DƯỚI ĐÂY -->
+        <!-- =============================================================== -->
+        <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover scale-105 blur-[4px] opacity-60 -z-20 pointer-events-none">
+            <!-- Hiện tôi đang để 1 video placeholder về đọc sách, hãy thay bằng link video của bạn -->
+            <source src="./images/CLB BAM.mp4" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ thẻ video.
+        </video>
+        <!-- Lớp phủ (Overlay) chuyển sắc để video chìm vào nền và chữ nổi bật hơn -->
+        <div class="absolute inset-0 bg-gradient-to-b from-dark-bg/70 via-dark-bg/60 to-dark-bg -z-10"></div>
+
+        <!-- Background Elements -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-600/20 rounded-full blur-[120px] -z-10"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-blue-600/10 rounded-full blur-[120px] -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up" data-aos-duration="1000">
+            <div class="inline-flex items-center space-x-2 bg-dark-card border border-dark-border rounded-full px-4 py-1.5 mb-6">
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                <span class="text-xs font-medium text-slate-300">Tuyển thành viên Gen 10 đang mở!</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+                CLB Sách và Hành động <br class="hidden md:block"> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-teal-400">HVKTQS (BAM)</span>
+            </h1>
+            
+            <p class="mt-4 text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto font-light mb-10">
+                "Đọc sách - Tư duy - Hành động"<br>
+                <span class="text-base md:text-lg mt-2 block">Nơi lan tỏa văn hóa đọc và phát triển bản thân từ năm 2016.</span>
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#tuyen-thanh-vien" class="bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] flex items-center justify-center gap-2">
+                    Ứng tuyển ngay <i class="fas fa-arrow-right text-sm"></i>
+                </a>
+                <a href="#gioi-thieu" class="bg-dark-card hover:bg-dark-border border border-dark-border text-white px-8 py-4 rounded-full text-lg font-medium transition-all flex items-center justify-center gap-2">
+                    Khám phá CLB
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#gioi-thieu" class="text-slate-500 hover:text-white transition-colors">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <section id="gioi-thieu" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16" data-aos="fade-right">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Về Chúng Tôi</h2>
+                <div class="h-1 w-20 bg-brand-500 rounded"></div>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[200px]">
+                
+                <!-- Card 1: Câu chuyện / Sứ mệnh (Span 2x2) -->
+                <div class="bento-card col-span-1 md:col-span-2 lg:col-span-2 row-span-2 bg-dark-card rounded-3xl p-8 border border-dark-border flex flex-col justify-center relative overflow-hidden" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="absolute top-0 right-0 -mr-8 -mt-8 text-dark-border opacity-20">
+                        <i class="fas fa-quote-right text-9xl"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-brand-500/20 text-brand-400 rounded-2xl flex items-center justify-center mb-6 text-2xl">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Sứ mệnh của BAM</h3>
+                        <p class="text-slate-300 leading-relaxed">
+                            Thành lập ngày <strong>10/10/2016</strong>, CLB Sách và Hành động HVKTQS ra đời với mục đích lan tỏa văn hóa đọc, tạo môi trường cho học viên, sinh viên giao lưu, học hỏi, và rèn luyện kỹ năng để hoàn thiện bản thân. Chúng tôi tin rằng, mỗi cuốn sách là một thế giới, và hành động là chìa khóa mở cửa thế giới ấy.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Con số ấn tượng (Sách) -->
+                <div class="bento-card col-span-1 bg-gradient-to-br from-dark-card to-slate-800 rounded-3xl p-6 border border-dark-border flex flex-col justify-center items-center text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-brand-400 text-4xl font-black mb-2 tracking-tighter">2000+</div>
+                    <h4 class="text-white font-semibold text-lg">Đầu Sách Đa Dạng</h4>
+                    <p class="text-sm text-slate-400 mt-2">Từ giáo trình, tiểu thuyết, văn học đến kỹ năng tư duy.</p>
+                </div>
+
+                <!-- Card 3: Hoạt động -->
+                <div class="bento-card col-span-1 bg-dark-card rounded-3xl p-6 border border-dark-border flex flex-col justify-center items-center text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-brand-400 text-4xl font-black mb-2 tracking-tighter">9+</div>
+                    <h4 class="text-white font-semibold text-lg">Năm Hoạt Động</h4>
+                    <p class="text-sm text-slate-400 mt-2">Nhiệt huyết, gắn kết và không ngừng kiến tạo giá trị.</p>
+                </div>
+
+                <!-- Card 4: Không gian & Thời gian (Span 2 ngang) -->
+                <div class="bento-card col-span-1 md:col-span-2 lg:col-span-2 bg-dark-card rounded-3xl p-6 border border-dark-border flex flex-col justify-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center shrink-0 text-xl">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-lg mb-1">Không Gian Hoạt Động</h4>
+                            <p class="text-slate-300"><strong>Địa điểm:</strong> Tầng 4 – Tòa H9 mới – HVKTQS</p>
+                            <p class="text-slate-300 mt-1"><strong>Thời gian:</strong> Thứ 7 & Chủ nhật hàng tuần.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="hoat-dong" class="py-24 bg-slate-900/50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16 flex flex-col items-end text-right" data-aos="fade-left">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Dấu Ấn Sự Kiện</h2>
+                <div class="h-1 w-20 bg-brand-500 rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Event 1 -->
+                <!-- =============================================================== -->
+                <!-- ĐIỀN LINK SỰ KIỆN 1 VÀO THUỘC TÍNH `href="#"` BÊN DƯỚI -->
+                <!-- =============================================================== -->
+                <a href="https://web.facebook.com/share/p/1Du6fAVzKJ/" target="_blank" class="block bento-card bg-dark-card rounded-3xl border border-dark-border overflow-hidden group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-48 img-container bg-slate-700 relative">
+                        <!-- Vòng lặp ảnh (Carousel) -->
+                        <div class="carousel-inner flex w-full h-full transition-transform duration-500 ease-in-out" data-slide-index="0">
+                            <!-- THAY ẢNH SỰ KIỆN VÀO ĐÂY (ẢNH 1) -->
+                            <img src="./images/vatnang.jpg" alt="Đêm sách 1" class="min-w-full w-full h-full object-cover">
+                            <!-- THAY ẢNH SỰ KIỆN VÀO ĐÂY (ẢNH 2) -->
+                            <img src="./images/vatnang 1.jpg" alt="Đêm sách 2" class="min-w-full w-full h-full object-cover">
+                            <!-- THAY ẢNH SỰ KIỆN VÀO ĐÂY (ẢNH 3) -->
+                            <img src="./images/vatnang 2.jpg" alt="Đêm sách 3" class="min-w-full w-full h-full object-cover">
+                        </div>
+                        <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Collab ĐH Sư Phạm HN</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Đêm Sách "Vạt Nắng"</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Sự kiện kết hợp cùng CLB Sách và Hành động ĐH Sư phạm HN, mang đến không gian thi ca, âm nhạc và những câu chuyện chữa lành tâm hồn.</p>
+                    </div>
+                </a>
+
+                <!-- Event 2 -->
+                <!-- =============================================================== -->
+                <!-- ĐIỀN LINK SỰ KIỆN 2 VÀO THUỘC TÍNH `href="#"` BÊN DƯỚI -->
+                <!-- =============================================================== -->
+                <a href="https://web.facebook.com/share/p/19UGWGsdwF/" target="_blank" class="block bento-card bg-dark-card rounded-3xl border border-dark-border overflow-hidden group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-48 img-container bg-slate-700 relative">
+                        <!-- Vòng lặp ảnh (Carousel) -->
+                        <div class="carousel-inner flex w-full h-full transition-transform duration-500 ease-in-out" data-slide-index="0">
+                            <!-- THAY ẢNH HOẠT ĐỘNG VÀO ĐÂY (ẢNH 1) -->
+                            <img src="./images/anhtuyensinh1.jpg" alt="Hỗ trợ nhập học 1" class="min-w-full w-full h-full object-cover">
+                            <!-- THAY ẢNH HOẠT ĐỘNG VÀO ĐÂY (ẢNH 2) -->
+                            <img src="./images/anhtuyensinh2.jpg" alt="Hỗ trợ nhập học 2" class="min-w-full w-full h-full object-cover">
+                            <!-- THAY ẢNH HOẠT ĐỘNG VÀO ĐÂY (ẢNH 3) -->
+                            <img src="./images/anhtuyensinh3.jpg" alt="Hỗ trợ nhập học 3" class="min-w-full w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Hỗ Trợ Nhập Học MTA</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Lực lượng nòng cốt tham gia phục vụ công tác nhập học cho tân học viên quân sự Khóa 62 và sinh viên dân sự Khóa 19 của HVKTQS.</p>
+                    </div>
+                </a>
+
+                <!-- Event 3 -->
+                <!-- =============================================================== -->
+                <!-- ĐIỀN LINK SỰ KIỆN 3 VÀO THUỘC TÍNH `href="#"` BÊN DƯỚI -->
+                <!-- =============================================================== -->
+                <a href="#" target="_blank" class="block bento-card bg-dark-card rounded-3xl border border-dark-border overflow-hidden group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-48 img-container bg-slate-700 relative">
+                        <!-- Vòng lặp ảnh (Carousel) -->
+                        <div class="carousel-inner flex w-full h-full transition-transform duration-500 ease-in-out" data-slide-index="0">
+                            <!-- THAY ẢNH SINH HOẠT VÀO ĐÂY (ẢNH 1) -->
+                            <img src="./images/hoatdong1.jpg" alt="Nội bộ 1" class="min-w-full w-full h-full object-cover">
+                            <!-- THAY ẢNH SINH HOẠT VÀO ĐÂY (ẢNH 2) -->
+                            <img src="./images/hoatdong2.jpg" alt="Nội bộ 2" class="min-w-full w-full h-full object-cover">
+                            <!-- THAY ẢNH SINH HOẠT VÀO ĐÂY (ẢNH 3) -->
+                            <img src="./images/hoatdong3.jpg" alt="Nội bộ 3" class="min-w-full w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Gắn Kết Nội Bộ</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">Hàng tuần và hàng tháng luôn ngập tràn tiếng cười với board-game, tổ chức sinh nhật, trang trí Trung thu, Giáng sinh và các dịp lễ đặc biệt (20/10, 8/3).</p>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="thu-vien" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 text-center" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Thư Viện Hình Ảnh</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Những khoảnh khắc thanh xuân rực rỡ và các hoạt động ý nghĩa của BAM được lưu giữ tại đây.</p>
+            </div>
+
+            <!-- Image Grid (Bento style) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[150px] md:auto-rows-[200px]">
+                <!-- Ảnh 1 (To - 2x2) -->
+                <div class="col-span-2 row-span-2 bento-card rounded-2xl img-container cursor-pointer group" data-aos="fade-up" data-aos-delay="100">
+                    <!-- BẠN CÓ THỂ THAY BẰNG ẢNH BẰNG KHEN / GIẤY KHEN VÀO ĐÂY -->
+                    <img src="./images/tv3.jpg" alt="Sinh hoạt CLB" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span class="text-white font-medium">Tập thể BAM</span>
+                    </div>
+                </div>
+                
+                <!-- Ảnh 2 -->
+                <div class="bento-card rounded-2xl img-container cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                    <img src="./images/tv1.jpg" alt="Sách" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Ảnh 3 -->
+                <div class="bento-card rounded-2xl img-container cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+                    <img src="./images/tv4.jpg" alt="Học tập" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Ảnh 4 (Dài ngang) -->
+                <div class="col-span-2 bento-card rounded-2xl img-container cursor-pointer group" data-aos="fade-up" data-aos-delay="400">
+                    <img src="./images/tv5.jpg" alt="Hoạt động nhóm" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="text-white font-bold tracking-widest uppercase">Tuyển gen mới</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút Xem Thêm (Link chờ) -->
+            <div class="mt-12 flex justify-center" data-aos="fade-up">
+                <!-- =============================================================== -->
+                <!-- ĐIỀN LINK TRANG WEB HOẶC ALBUM ẢNH CỦA BẠN VÀO THUỘC TÍNH `href` MÃ BÊN DƯỚI -->
+                <!-- =============================================================== -->
+                <a href="https://web.facebook.com/sachvahanhdongHVKTQS/photos" target="_blank" rel="noopener noreferrer" class="group relative px-8 py-3 bg-dark-card border border-dark-border text-white rounded-full font-medium overflow-hidden transition-all hover:border-brand-500">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Xem toàn bộ Thư viện <i class="fas fa-external-link-alt text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                    <div class="absolute inset-0 bg-brand-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="tuyen-thanh-vien" class="py-24 relative overflow-hidden">
+        <!-- Glow background cho section tuyển dụng -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-full max-h-[600px] bg-brand-500/10 blur-[150px] -z-10 rounded-full"></div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-br from-dark-card to-slate-900 rounded-[2.5rem] p-8 md:p-14 border border-brand-500/30 shadow-[0_0_40px_rgba(34,197,94,0.1)] relative overflow-hidden" data-aos="zoom-in">
+                
+                <!-- Decoration -->
+                <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                    <i class="fas fa-feather-alt text-9xl text-brand-400"></i>
+                </div>
+
+                <div class="text-center mb-10 relative z-10">
+                    <div class="inline-block bg-brand-500/20 text-brand-400 font-bold px-4 py-1.5 rounded-full text-sm mb-4">
+                        CHÍNH THỨC MỞ ĐƠN GEN 10 BAM
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 uppercase tracking-wide">
+                        "Viết Tiếp Chương Thanh Xuân"
+                    </h2>
+                </div>
+
+                <!-- Thơ & Lời ngỏ (Sử dụng font Serif) -->
+                <div class="font-serif text-slate-300 text-center text-lg md:text-xl italic max-w-3xl mx-auto mb-12 space-y-4 leading-relaxed relative z-10">
+                    <p>"Tháng Chín gõ cửa bằng một mùa thay lá,<br>Tuổi thanh xuân chớp mắt hóa lưng chừng.<br>Có vần thơ nào gieo hoài mà chưa thỏa,<br>Có đoạn tình nào gói ghém mãi chưa xưng?"</p>
+                    
+                    <p class="not-italic font-sans text-base text-slate-400 mt-6 text-justify md:text-center">
+                        Mỗi người chúng ta đều là một tác giả đang cặm cụi viết nên cuốn tiểu thuyết của cuộc đời mình. Ở BAM, sách không chỉ nằm lặng im trên giá. Những con chữ sẽ được đánh thức, mang theo hương giấy mới, và trở thành cầu nối để những tâm hồn yêu văn chương, khao khát cái đẹp tìm thấy nhau.
+                    </p>
+                </div>
+
+                <!-- Bento Info Box cho Thông tin Phỏng vấn -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 relative z-10">
+                    <div class="bg-black/30 p-5 rounded-2xl border border-white/5 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-full flex items-center justify-center shrink-0">
+                            <i class="far fa-clock text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-400 uppercase tracking-wider font-semibold">Thời gian</p>
+                            <p class="text-white font-medium">08:00 – 17:00, Ngày 12 – 13/09/2026</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-black/30 p-5 rounded-2xl border border-white/5 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center shrink-0">
+                            <i class="fas fa-map-pin text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-400 uppercase tracking-wider font-semibold">Địa điểm</p>
+                            <p class="text-white font-medium">Phòng 412, tầng 4 – Tòa S9, HVKTQS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nút Đăng ký -->
+                <div class="text-center relative z-10">
+                    <a href="https://tinyurl.com/5fhxv7rf" target="_blank" class="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-brand-500 to-teal-500 hover:from-brand-400 hover:to-teal-400 text-white px-10 py-4 rounded-full text-xl font-bold transition-all shadow-[0_10px_20px_-10px_rgba(34,197,94,0.6)] hover:shadow-[0_15px_30px_-10px_rgba(34,197,94,0.8)] transform hover:-translate-y-1">
+                        Điền Form Đăng Ký Ngay <i class="fas fa-paper-plane"></i>
+                    </a>
+                    <p class="mt-4 text-sm text-slate-400">Đừng để những xúc cảm của bạn mãi ngủ yên trong ngăn kéo!</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 border-t border-dark-border pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
+                <!-- Về CLB -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center mr-2">
+                            <span class="text-white text-xs font-bold">BAM</span>
+                        </div>
+                        <span class="font-bold text-lg text-white">CLB Sách và Hành động</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Đọc sách - Tư duy - Hành động. Môi trường nhiệt huyết dành cho những người trẻ yêu sách và khao khát phát triển bản thân tại Học viện Kỹ thuật Quân sự.
+                    </p>
+                </div>
+
+                <!-- Thông tin liên hệ -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-white font-bold text-lg mb-4">Mọi thắc mắc xin vui lòng liên hệ:</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <a href="https://web.facebook.com/sachvahanhdongHVKTQS" class="flex items-center gap-3 text-slate-400 hover:text-brand-400 transition-colors p-3 bg-dark-card rounded-xl border border-dark-border">
+                            <i class="fab fa-facebook text-xl text-blue-500"></i>
+                            <span class="text-sm font-medium">Fanpage BAM HVKTQS</span>
+                        </a>
+                        
+                        <a href="mailto:clbsachvahanhdonghvktqs@gmail.com" class="flex items-center gap-3 text-slate-400 hover:text-brand-400 transition-colors p-3 bg-dark-card rounded-xl border border-dark-border">
+                            <i class="fas fa-envelope text-xl text-red-500"></i>
+                            <span class="text-sm font-medium truncate">clbsachvahanhdonghvktqs@gmail.com</span>
+                        </a>
+                        
+                        <div class="flex items-center gap-3 text-slate-400 p-3 bg-dark-card rounded-xl border border-dark-border sm:col-span-2">
+                            <i class="fas fa-phone-alt text-xl text-green-500"></i>
+                            <span class="text-sm font-medium">Hotline: 0862711223 (Chủ nhiệm: Cao Thọ Hiếu)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-dark-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-sm">
+                    &copy; 2026 CLB Sách và Hành động HVKTQS. Thiết kế với <i class="fas fa-heart text-red-500 mx-1"></i>.
+                </p>
+                <div class="flex space-x-4 text-slate-500">
+                    <span class="text-sm">#BAM</span>
+                    <span class="text-sm">#Gen10</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Khởi tạo hiệu ứng AOS
+        AOS.init({
+            once: true, // Animation chỉ chạy 1 lần
+            offset: 50, // Khoảng cách cuộn để kích hoạt
+            duration: 800, // Thời gian chạy animation
+            easing: 'ease-out-cubic',
+        });
+
+        // Xử lý sự kiện Navbar đổi màu nền khi cuộn
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-lg', 'border-b', 'border-dark-border');
+                navbar.classList.remove('py-2');
+            } else {
+                navbar.classList.remove('shadow-lg', 'border-b', 'border-dark-border');
+                navbar.classList.add('py-2');
+            }
+        });
+
+        // Xử lý Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Đóng menu mobile khi click vào link
+        const mobileLinks = menu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // =========================================================================
+        // Xử lý hiệu ứng lướt ngang (Carousel) tự động cho Dấu ấn sự kiện
+        // =========================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousels = document.querySelectorAll('.carousel-inner');
+            
+            // Thiết lập vòng lặp sau mỗi 5 giây (5000 milliseconds)
+            setInterval(() => {
+                carousels.forEach(carousel => {
+                    // Đếm số lượng ảnh có trong thẻ sự kiện (ở đây là 3)
+                    const imageCount = carousel.querySelectorAll('img').length;
+                    
+                    // Lấy vị trí ảnh hiện tại, mặc định là 0
+                    let currentIndex = parseInt(carousel.getAttribute('data-slide-index')) || 0;
+                    
+                    // Chuyển sang ảnh tiếp theo, nếu hết ảnh thì quay về 0
+                    currentIndex = (currentIndex + 1) % imageCount;
+                    
+                    // Cập nhật thuộc tính index và dịch chuyển khung (transform: translateX)
+                    carousel.setAttribute('data-slide-index', currentIndex);
+                    carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
